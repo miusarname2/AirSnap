@@ -10,18 +10,17 @@ export class HandDetector {
   async init(onProgress) {
     if (this.isReady) return;
 
-    if (onProgress) onProgress('Cargando motor de visión MediaPipe...');
+    if (onProgress) onProgress('Cargando motor de visión...');
     let vision;
     try {
       vision = await FilesetResolver.forVisionTasks('./wasm');
-    } catch (err) {
-      console.warn('Cargando desde CDN fallback...', err);
+    } catch {
       vision = await FilesetResolver.forVisionTasks(
         'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm'
       );
     }
 
-    if (onProgress) onProgress('Descargando modelo de detección de manos...');
+    if (onProgress) onProgress('Preparando modelo neuronal...');
     this.landmarker = await HandLandmarker.createFromOptions(vision, {
       baseOptions: {
         modelAssetPath:
@@ -35,7 +34,7 @@ export class HandDetector {
     });
 
     this.isReady = true;
-    if (onProgress) onProgress('¡Detector de manos listo!');
+    if (onProgress) onProgress('Listo');
   }
 
   detect(videoElement, width, height) {
@@ -58,8 +57,7 @@ export class HandDetector {
     let results = null;
     try {
       results = this.landmarker.detectForVideo(videoElement, now);
-    } catch (e) {
-      console.warn('Error en detectForVideo:', e);
+    } catch {
       return null;
     }
 
@@ -68,10 +66,6 @@ export class HandDetector {
     }
 
     const landmarks = results.landmarks[0];
-
-    // Modo espejo idéntico a main.py:
-    // En main.py se invertía la imagen con cv2.flip(frame, 1) y luego se calculaba:
-    // pts = [((p.x - 0.1) / 0.8 * W, (p.y - 0.1) / 0.8 * H) for p in res.hand_landmarks[0]]
     const pts = landmarks.map(p => {
       const mirroredX = 1 - p.x;
       const sx = ((mirroredX - 0.1) / 0.8) * width;
@@ -79,18 +73,15 @@ export class HandDetector {
       return [sx, sy, p.z || 0];
     });
 
-    // Centro de la palma: promedio de muñeca (0) y bases de dedos (5, 9, 13, 17)
     const palmIndices = [0, 5, 9, 13, 17];
     const cx = palmIndices.reduce((sum, i) => sum + pts[i][0], 0) / 5;
     const cy = palmIndices.reduce((sum, i) => sum + pts[i][1], 0) / 5;
 
-    // Tamaño de la mano: distancia de la muñeca (0) a la base del dedo medio (9)
     const tam = Math.max(
       Math.hypot(pts[0][0] - pts[9][0], pts[0][1] - pts[9][1]),
       1
     );
 
-    // Distancia media de las 4 puntas de los dedos (8, 12, 16, 20) al centro de la palma
     const fingertips = [8, 12, 16, 20];
     const avgTipDist =
       fingertips.reduce((sum, t) => sum + Math.hypot(pts[t][0] - cx, pts[t][1] - cy), 0) / 4;

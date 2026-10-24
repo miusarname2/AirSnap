@@ -1,4 +1,3 @@
-// Generador de sonidos procedurales equivalentes a los generados en main.py
 class SoundManager {
   constructor() {
     this.ctx = null;
@@ -24,7 +23,6 @@ class SoundManager {
     osc1.type = 'sine';
     osc1.frequency.setValueAtTime(freq, startTime);
 
-    // Segundo armónico para dar calidez similar a main.py
     osc2.type = 'sine';
     osc2.frequency.setValueAtTime(freq * 2, startTime);
 

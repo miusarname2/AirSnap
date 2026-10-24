@@ -70,7 +70,6 @@ html, body {
   pointer-events: none;
 }
 
-/* Overlay de Vidrio Esmerilado (Glassmorphism) */
 .glass-overlay {
   position: absolute;
   inset: 0;
@@ -150,7 +149,6 @@ html, body {
   font-weight: 600;
 }
 
-/* Botones */
 .btn {
   font-family: var(--font-heading);
   padding: 12px 24px;
@@ -177,7 +175,6 @@ html, body {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Barra Superior Flotante */
 .top-hud-bar {
   position: absolute;
   top: 16px;
@@ -293,7 +290,6 @@ html, body {
   flex-shrink: 0;
 }
 
-/* Indicación sutil inferior */
 .bottom-hint {
   position: absolute;
   bottom: 14px;

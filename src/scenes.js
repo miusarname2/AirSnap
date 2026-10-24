@@ -1,5 +1,3 @@
-// Generador de imágenes procedurales idénticas y mejoradas de main.py
-
 export function createProceduralScenes(size = 480) {
   return [
     createMountainsScene(size),
@@ -14,7 +12,6 @@ function createMountainsScene(size) {
   canvas.height = size;
   const ctx = canvas.getContext('2d');
 
-  // Degradado de cielo (de púrpura/magenta oscuro a naranja/durazno brillante)
   const sky = ctx.createLinearGradient(0, 0, 0, size);
   sky.addColorStop(0, '#3c285a');
   sky.addColorStop(0.4, '#823768');
@@ -23,7 +20,6 @@ function createMountainsScene(size) {
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, size, size);
 
-  // Estrellas
   ctx.fillStyle = '#ffffff';
   const seedRandom = (seed) => {
     let x = Math.sin(seed++) * 10000;
@@ -38,7 +34,6 @@ function createMountainsScene(size) {
     ctx.fill();
   }
 
-  // Sol resplandeciente
   const sunX = size * 0.5;
   const sunY = size * 0.55;
   const glow = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, size * 0.35);
@@ -55,7 +50,6 @@ function createMountainsScene(size) {
   ctx.arc(sunX, sunY, size * 0.14, 0, Math.PI * 2);
   ctx.fill();
 
-  // Capas de montañas
   const layers = [
     {
       color: '#784b73',
@@ -98,7 +92,6 @@ function createCityScene(size) {
   canvas.height = size;
   const ctx = canvas.getContext('2d');
 
-  // Cielo nocturno
   const sky = ctx.createLinearGradient(0, 0, 0, size);
   sky.addColorStop(0, '#101728');
   sky.addColorStop(0.5, '#1e2640');
@@ -106,7 +99,6 @@ function createCityScene(size) {
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, size, size);
 
-  // Estrellas
   ctx.fillStyle = '#ffffff';
   for (let i = 0; i < 60; i++) {
     const rx = (Math.sin(i * 12.9898) * 43758.5453 % 1 + 1) % 1 * size;
@@ -116,7 +108,6 @@ function createCityScene(size) {
     ctx.fill();
   }
 
-  // Luna brillante y cráteres
   const moonX = size * 0.78;
   const moonY = size * 0.18;
   const moonR = size * 0.08;
@@ -134,7 +125,6 @@ function createCityScene(size) {
   ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
   ctx.fill();
 
-  // Cráteres lunares
   ctx.fillStyle = '#d2dbe5';
   [
     [moonX - 8, moonY - 6, 7],
@@ -146,7 +136,6 @@ function createCityScene(size) {
     ctx.fill();
   });
 
-  // Edificios silueteados
   let curX = 0;
   let idx = 0;
   while (curX < size) {
@@ -160,7 +149,6 @@ function createCityScene(size) {
     ctx.fillStyle = bGrad;
     ctx.fillRect(curX, bTop, bw, bh);
 
-    // Ventanas iluminadas
     for (let wy = bTop + 14; wy < size - 20; wy += 22) {
       for (let wx = curX + 7; wx < curX + bw - 10; wx += 16) {
         if ((wx * 13 + wy * 19 + idx) % 5 > 2) {
@@ -183,7 +171,6 @@ function createGeometricScene(size) {
   canvas.height = size;
   const ctx = canvas.getContext('2d');
 
-  // Fondo oscuro moderno
   ctx.fillStyle = '#1e1a18';
   ctx.fillRect(0, 0, size, size);
 
