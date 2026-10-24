@@ -1,0 +1,8 @@
+node_modules
+dist
+.vercel
+*.task
+sonidos_rompe/
+__pycache__/
+*.pyc
+.DS_Store
