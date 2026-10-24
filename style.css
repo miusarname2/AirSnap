@@ -17,6 +17,7 @@
   box-sizing: border-box;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
@@ -46,16 +47,19 @@ html, body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  touch-action: none;
 }
 
 #gameCanvas {
-  max-width: 100%;
-  max-height: 100%;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
   aspect-ratio: 16 / 9;
   object-fit: contain;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   cursor: grab;
+  touch-action: none;
+  -webkit-touch-callout: none;
 }
 
 #gameCanvas:active {
@@ -177,9 +181,10 @@ html, body {
 
 .top-hud-bar {
   position: absolute;
-  top: 16px;
-  left: 20px;
-  right: 20px;
+  top: max(10px, calc((100vh - min(100vh, calc(100vw * 9 / 16))) / 2 + 12px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100vw - 20px), calc(min(100vw, calc(100vh * 16 / 9)) - 24px));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -191,7 +196,7 @@ html, body {
   pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .hud-center {
@@ -199,7 +204,7 @@ html, body {
   border: 1px solid var(--panel-border);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  padding: 8px 24px;
+  padding: 8px 22px;
   border-radius: 30px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
@@ -208,7 +213,7 @@ html, body {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   backdrop-filter: blur(14px);
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: 30px;
   font-family: var(--font-heading);
   font-weight: 700;
@@ -292,29 +297,78 @@ html, body {
 
 .bottom-hint {
   position: absolute;
-  bottom: 14px;
+  bottom: max(10px, calc((100vh - min(100vh, calc(100vw * 9 / 16))) / 2 + 10px));
   left: 50%;
   transform: translateX(-50%);
   background: rgba(15, 18, 25, 0.7);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 6px 20px;
+  padding: 6px 18px;
   border-radius: 20px;
   color: #94a3b8;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   pointer-events: none;
   z-index: 10;
   white-space: nowrap;
+  max-width: 90vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 960px) {
+  .top-hud-bar {
+    gap: 8px;
+  }
+  .hud-center {
+    padding: 6px 14px;
+    gap: 8px;
+  }
+  .stat-val {
+    font-size: 0.95rem;
+  }
+  .stat-label {
+    font-size: 0.55rem;
+  }
+  .stat-divider {
+    height: 16px;
+    margin: 0 2px;
+  }
 }
 
 @media (max-width: 768px) {
-  .top-hud-bar {
-    top: 8px;
-    left: 8px;
-    right: 8px;
+  .logo-pill {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  .icon-btn {
+    height: 36px;
+    padding: 0 10px;
   }
   .icon-btn span {
     display: none;
+  }
+  .loading-card {
+    padding: 28px 24px;
+    max-width: 92%;
+  }
+  #loadingTitle {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .hud-left {
+    gap: 6px;
+  }
+  .hud-right {
+    gap: 6px;
+  }
+  .hud-center {
+    padding: 4px 10px;
+  }
+  .stat-val {
+    font-size: 0.85rem;
   }
   .bottom-hint {
     display: none;
