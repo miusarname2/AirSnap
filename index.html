@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rompecabezas por Gestos | Visión Artificial e IA</title>
-  <meta name="description" content="Juego de rompecabezas interactivo controlado en tiempo real por gestos con la mano mediante MediaPipe e inteligencia artificial.">
+  <title>AirSnap — Interactive Motion Puzzle</title>
+  <meta name="description" content="Control and solve dynamic puzzles in the air using computer vision and hand gestures.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,37 +12,32 @@
 </head>
 <body>
   <div id="app" class="app-container">
-    <!-- Contenedor del Canvas Principal -->
     <div class="canvas-wrapper" id="canvasWrapper">
       <canvas id="gameCanvas" width="1280" height="720"></canvas>
-
-      <!-- Video oculto para el flujo de la cámara -->
       <video id="webcam" autoplay playsinline muted></video>
 
-      <!-- Pantalla de Carga y Permisos -->
       <div id="loadingOverlay" class="glass-overlay">
         <div class="loading-card">
           <div class="spinner"></div>
-          <h2 id="loadingTitle">Iniciando Rompecabezas IA</h2>
-          <p id="loadingMsg">Solicitando acceso a la cámara y cargando modelos...</p>
+          <h2 id="loadingTitle">AirSnap</h2>
+          <p id="loadingMsg">Iniciando cámara y entorno de visión...</p>
           <div class="credits-box">
-            <span>Software original (Python): <strong>Alexander Santamaria Bayona - Juan David Jaimes Figueroa</strong></span>
-            <span>Versión e ingeniería Web: <strong>100% de mi autoría</strong></span>
+            <span>Prototipo original (Python): <strong>Alexander Santamaria Bayona & Juan David Jaimes Figueroa</strong></span>
+            <span>Versión e ingeniería Web: <strong>oscarmauricio631</strong></span>
           </div>
           <div class="fallback-action" id="mouseFallbackBtn" style="display: none;">
-            <button class="btn btn-secondary" id="btnUseMouse">Continuar solo con Ratón / Touch</button>
+            <button class="btn btn-secondary" id="btnUseMouse">Continuar con cursor</button>
           </div>
         </div>
       </div>
 
-      <!-- Barra de Accesos Rápidos Superior Flotante -->
       <nav class="top-hud-bar" id="topHudBar">
         <div class="hud-left">
           <div class="logo-pill">
-            <span class="dot-live"></span> Rompecabezas IA
+            <span class="dot-live"></span> AirSnap
           </div>
-          <button class="icon-btn" id="btnToggleRef" title="Mostrar/Ocultar foto de referencia (Tecla V)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <button class="icon-btn" id="btnToggleRef" title="Referencia visual (V)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
             <span>Referencia</span>
           </button>
         </div>
@@ -65,23 +60,22 @@
         </div>
 
         <div class="hud-right">
-          <label class="icon-btn" title="Cargar tu propia imagen">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <label class="icon-btn" title="Subir imagen propia">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
             <span>Subir foto</span>
             <input type="file" id="imageUpload" accept="image/*" style="display: none;">
           </label>
           <button class="icon-btn" id="btnSound" title="Silenciar / Activar sonido">
-            <svg id="soundIconOn" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            <svg id="soundIconOn" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
           </button>
-          <button class="icon-btn" id="btnFullscreen" title="Pantalla completa (Tecla F)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          <button class="icon-btn" id="btnFullscreen" title="Pantalla completa (F)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
           </button>
         </div>
       </nav>
 
-      <!-- Instrucción sutil inferior -->
       <div class="bottom-hint" id="bottomHint">
-        <span>Mueve tu mano frente a la cámara • Cierra el puño para agarrar • Abre para soltar</span>
+        <span>Cierra el puño para tomar • Abre para soltar</span>
       </div>
     </div>
   </div>

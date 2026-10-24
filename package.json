@@ -1,15 +1,19 @@
 {
-  "name": "rompecabezas-gestos-ia",
+  "name": "airsnap",
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miusarname2/AirSnap"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mediapipe/tasks-vision": "^0.10.14"
+    "@mediapipe/tasks-vision": "0.10.35"
   },
   "devDependencies": {
     "vite": "^6.2.0"
