@@ -528,14 +528,14 @@ function gameLoop() {
     ctx.textAlign = 'center';
     ctx.fillStyle = TEXTO;
     ctx.font = '700 48px Outfit, sans-serif';
-    ctx.fillText('R O M P E C A B E Z A S', W / 2, 130);
+    ctx.fillText('A I R S N A P', W / 2, 130);
 
     ctx.fillStyle = ACENTO;
     ctx.fillRect(W / 2 - 140, 150, 280, 4);
 
     ctx.fillStyle = GRIS;
     ctx.font = '500 20px Inter, sans-serif';
-    ctx.fillText('Control por gestos con la mano', W / 2, 190);
+    ctx.fillText('Control por gestos en el aire', W / 2, 190);
     ctx.restore();
 
     BOTONES_MENU.forEach(b => {
