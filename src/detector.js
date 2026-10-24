@@ -11,9 +11,15 @@ export class HandDetector {
     if (this.isReady) return;
 
     if (onProgress) onProgress('Cargando motor de visión MediaPipe...');
-    const vision = await FilesetResolver.forVisionTasks(
-      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-    );
+    let vision;
+    try {
+      vision = await FilesetResolver.forVisionTasks('./wasm');
+    } catch (err) {
+      console.warn('Cargando desde CDN fallback...', err);
+      vision = await FilesetResolver.forVisionTasks(
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm'
+      );
+    }
 
     if (onProgress) onProgress('Descargando modelo de detección de manos...');
     this.landmarker = await HandLandmarker.createFromOptions(vision, {
