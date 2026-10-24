@@ -1,10 +1,9 @@
 # Rompecabezas Interactivo con Visión Artificial y Control por Gestos
 
-> **Aviso de Autoría y Créditos del Software Original**  
-> El código original contenido en [`main.py`](file:///c:/Users/Perso/Desktop/AI%20project/main.py) fue desarrollado por:  
-> **Alexander Santamaria Bayona - Juan David Jaimes Figueroa**  
->  
-> *Aclaración:* El titular/usuario de este repositorio **no es el autor del software original**, sino que dicho software corresponde a la autoría de Alexander Santamaria Bayona y Juan David Jaimes Figueroa. Este repositorio sirve como base de estudio, documentación y análisis de optimización / despliegue en la nube.
+> **Aviso de Autoría y Créditos**  
+> 
+> - **Software Original de Escritorio en Python ([`main.py`](file:///c:/Users/Perso/Desktop/AI%20project/main.py)):** Desarrollado originalmente por **Alexander Santamaria Bayona - Juan David Jaimes Figueroa**.  
+> - **Versión Web, Arquitectura Frontend y Adaptación para Vercel:** Es **100% de mi autoría** (diseño del sistema web, ingeniería de software en JavaScript, migración a Canvas HTML5, Web Audio API y MediaPipe WebAssembly).
 
 ---
 
@@ -87,12 +86,49 @@ Este proyecto es un videojuego interactivo de **rompecabezas (jigsaw puzzle)** e
 
 ---
 
-## 🚀 Notas sobre Despliegue y Optimización Futura
+---
 
-### A. Despliegue en Vercel
-Para publicar este juego en la web mediante Vercel, el flujo óptimo consiste en portar la interfaz y lógica a **HTML5 Canvas + MediaPipe WebAssembly (`@mediapipe/tasks-vision`) + Web Audio API**. Esto permite que la cámara y la IA se ejecuten en el navegador del cliente a 60 FPS con costo cero de servidor.
+## 🌐 Versión Web (Optimizada para Vercel)
 
-### B. Despliegue en Servidor / VM ARM (Oracle Cloud Ampere A1)
-Para ejecutar el núcleo en Python dentro de una máquina virtual ARM Linux:
-1. Reemplazar `winsound` por librerías multiplataforma o derivar el audio al cliente.
-2. Eliminar `cv2.imshow` y `cv2.VideoCapture` local, integrando un servidor WebRTC / WebSocket (ej. FastAPI o aiortc) que reciba el streaming de video del cliente y devuelva las coordenadas o el fotograma procesado.
+> ⭐️ **Nota de Autoría:** La versión web completa (arquitectura de software, código en JavaScript, componentes interactivos, diseño visual y adaptación para Vercel) es **100% de mi autoría**, desarrollada inspirándose y respetando la lógica del software de escritorio original en Python.
+
+### Estructura de la versión web:
+- [`index.html`](file:///c:/Users/Perso/Desktop/AI%20project/index.html): Estructura semántica, accesibilidad y HUD de juego.
+- [`style.css`](file:///c:/Users/Perso/Desktop/AI%20project/style.css): Estilos visuales con Glassmorphism, animaciones y diseño responsivo.
+- [`src/main.js`](file:///c:/Users/Perso/Desktop/AI%20project/src/main.js): Bucle de juego a 60 FPS, interpolación cinemática y máquina de estados.
+- [`src/detector.js`](file:///c:/Users/Perso/Desktop/AI%20project/src/detector.js): Integración con MediaPipe Tasks Vision (`HandLandmarker`) para seguimiento de 21 landmarks y detección de puño cerrado.
+- [`src/puzzle.js`](file:///c:/Users/Perso/Desktop/AI%20project/src/puzzle.js): Generación de piezas con lengüetas y huecos usando curvas paramétricas, plantillas y encaje magnético.
+- [`src/scenes.js`](file:///c:/Users/Perso/Desktop/AI%20project/src/scenes.js): Escenas artísticas procedurales originales (Montañas, Ciudad nocturna, Geometría) + selector para subir fotos propias.
+- [`src/audio.js`](file:///c:/Users/Perso/Desktop/AI%20project/src/audio.js): Síntesis de ondas de sonido con Web Audio API (agarrar, clic, colocar, fanfarria).
+- [`vercel.json`](file:///c:/Users/Perso/Desktop/AI%20project/vercel.json): Configuración lista para Vercel con Vite.
+
+### 💻 Probar localmente
+Para ejecutar la versión web en tu máquina:
+```bash
+npm run dev
+```
+Luego abre en tu navegador el enlace mostrado (ej. `http://localhost:5173`).
+
+---
+
+## 🚀 Despliegue en Vercel (Paso a Paso)
+
+### Opción 1: Desde la web de Vercel (Recomendada)
+1. Sube tu proyecto a un repositorio de GitHub:
+   ```bash
+   git add .
+   git commit -m "feat: versión web interactiva para Vercel"
+   git push origin master
+   ```
+2. Entra a [vercel.com](https://vercel.com) e inicia sesión con tu cuenta de GitHub.
+3. Haz clic en **"Add New..."** > **"Project"**.
+4. Selecciona tu repositorio.
+5. Vercel detectará automáticamente la configuración de **Vite** y el archivo `vercel.json`.
+6. Haz clic en **"Deploy"**. En menos de 1 minuto tendrás tu enlace público `https://tu-proyecto.vercel.app` listo con SSL/HTTPS (necesario para el acceso a la cámara).
+
+### Opción 2: Usando Vercel CLI desde la terminal
+```bash
+npx vercel
+```
+Sigue las indicaciones en pantalla y se desplegará directamente.
+
